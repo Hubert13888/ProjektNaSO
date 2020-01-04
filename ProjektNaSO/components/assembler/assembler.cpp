@@ -4,7 +4,7 @@ PCB *currPCB;
 vector<string> wykonywany_rozkaz;
 
 regex dla_wartosci("[\d]+");
-regex dla_adresu("[[][0-9]+[]]");
+regex dla_adresu("[\[][0-9]+[\]]");
 regex dla_rejestru("[ABCD]");
 
 map<string, int> ilosc_arg = {
@@ -30,7 +30,7 @@ map<string, int> ilosc_arg = {
 	{"TP", 2}, //tworzy proces
 	{"UP", 1}, //usuwa proces
 	{"WD", 3}, //wysyła dane do procesu
-	{"PD", 3}  //odbiera dane z procesu
+	{"PD", 2}  //odbiera dane z procesu
 };
 
 int adres_logiczny(string argument) {

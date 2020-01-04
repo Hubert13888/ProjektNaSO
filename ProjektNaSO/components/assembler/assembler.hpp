@@ -9,11 +9,21 @@ using namespace std;
 //Tymczasowy obiekt PCB
 class PCB {
 public:
-	int A, B, C, D, l_rozkazow;
+	int A, B, C, D, order_counter;
 };
 
-void zapisz_do_rejestru(string regFrom, int value);
+int logical_address(string argument);
 
-void interpretuj(PCB *pcb);
+void math_operation(int operacja);
 
-vector<string> pobierz_bajty_z_pamieci(int ilosc);
+void inc_dec(int operacja);
+
+int conditional_jumps(int operacja);
+
+void save_to_register(string regFrom, int value);
+
+int read_register(string rejestr);
+
+void interpret(PCB *pcb);
+
+vector<string> read_bytes(int ilosc);
