@@ -18,7 +18,7 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="process_management.h">
+    <ClInclude Include="components\assembler\assembler.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -29,7 +29,7 @@
     <ClCompile Include="ProjektNaSO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="process_management.cpp">
+    <ClCompile Include="components\assembler\assembler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
