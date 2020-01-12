@@ -6,7 +6,7 @@ vector<string> executed_order;
 regex for_value("[\d]+");
 regex for_address("[\[]([0-9]+|[A-D]+)[\]]");
 regex for_register("[ABCD]");
-regex for_state("[.][a-z]")
+regex for_state("[.][a-z]");
 
 map<string, int> arg_amount = {
 	{"PN", 2}, //przeniesienie
