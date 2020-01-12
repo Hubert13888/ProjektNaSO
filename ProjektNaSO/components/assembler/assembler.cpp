@@ -1,13 +1,14 @@
 ﻿#include "assembler.hpp"
 
 PCB *currPCB;
-vector<string> wykonywany_rozkaz;
+vector<string> executed_order;
 
-regex dla_wartosci("[\d]+");
-regex dla_adresu("[\[][0-9]+[\]]");
-regex dla_rejestru("[ABCD]");
+regex for_value("[\d]+");
+regex for_address("[\[]([0-9]+|[A-D]+)[\]]");
+regex for_register("[ABCD]");
+regex for_state("[.][a-z]")
 
-map<string, int> ilosc_arg = {
+map<string, int> arg_amount = {
 	{"PN", 2}, //przeniesienie
 	{"DD", 2}, //dodawanie
 	{"OD", 2}, //odejmowanie
@@ -33,56 +34,63 @@ map<string, int> ilosc_arg = {
 	{"PD", 2}  //odbiera dane z procesu
 };
 
-int adres_logiczny(string argument) {
-	string liczba;
+int logical_address(string argument) {
+	string number;
+	string registers[4] = { "A", "B", "C", "D" };
 	for (int i = 1; i < argument.length() - 2; i++)
-		liczba.push_back(argument[i]);
-	return stoi(liczba);
+		number.push_back(argument[i]);
+
+	for (auto reg : registers)
+		if (reg == number) {
+			return read_register(reg);
+		}
+
+	return stoi(number);
 }
 
 //1-dodawanie
 //2-odejmowanie
 //3-mnożenie
 
-void operacja_matematyczna(int operacja) {
+void math_operation(int operation) {
 	int l1, l2;
 
-	if (regex_match(wykonywany_rozkaz[2], dla_adresu)) {
-		//l1 = czytaj_pamiec(currPCB, adres_logiczny(wykonywany_rozkaz[2]));
+	if (regex_match(executed_order[2], for_address)) {
+		//l1 = read_memory(currPCB, logical_address(executed_order[2]));
 	}
-	else if (regex_match(wykonywany_rozkaz[2], dla_wartosci))
-		l1 = stoi(wykonywany_rozkaz[2]);
+	else if (regex_match(executed_order[2], for_value))
+		l1 = stoi(executed_order[2]);
 
-	else if (regex_match(wykonywany_rozkaz[2], dla_rejestru))
-		l1 = odczytaj_rejestr(wykonywany_rozkaz[2]);
+	else if (regex_match(executed_order[2], for_register))
+		l1 = read_register(executed_order[2]);
 
-	if (regex_match(wykonywany_rozkaz[1], dla_adresu)) {
-		//l2 = czytaj_pamiec(currPCB, adres_logiczny(wykonywany_rozkaz[1]));
+	if (regex_match(executed_order[1], for_address)) {
+		//l2 = read_memory(currPCB, logical_address(executed_order[1]));
 
-		switch (operacja) {
+		switch (operation) {
 		case 1:
-			//zapisz_do_pamieci(currPCB, gdzie_zapisac, l2+l1);
+			//write_memory(currPCB, gdzie_zapisac, l2+l1);
 			break;
 		case 2:
-			//zapisz_do_pamieci(currPCB, gdzie_zapisac, l2-l1);
+			//write_memory(currPCB, gdzie_zapisac, l2-l1);
 			break;
 		case 3:
-			//zapisz_do_pamieci(currPCB, gdzie_zapisac, l2*l1);
+			//write_memory(currPCB, gdzie_zapisac, l2*l1);
 			break;
 		}
 	}
-	else if (regex_match(wykonywany_rozkaz[1], dla_rejestru)) {
-		l2 = odczytaj_rejestr(wykonywany_rozkaz[1]);
+	else if (regex_match(executed_order[1], for_register)) {
+		l2 = read_register(executed_order[1]);
 
-		switch (operacja) {
+		switch (operation) {
 		case 1:
-			zapisz_do_rejestru(wykonywany_rozkaz[1], l2+l1);
+			save_to_register(executed_order[1], l2+l1);
 			break;
 		case 2:
-			zapisz_do_rejestru(wykonywany_rozkaz[1], l2-l1);
+			save_to_register(executed_order[1], l2-l1);
 			break;
 		case 3:
-			zapisz_do_rejestru(wykonywany_rozkaz[1], l2*l1);
+			save_to_register(executed_order[1], l2*l1);
 			break;
 		}
 	}
@@ -91,22 +99,22 @@ void operacja_matematyczna(int operacja) {
 //1 - Inkrementacja
 //2 - Dekrementacja
 
-void ink_dek(int operacja) {
-	if (regex_match(wykonywany_rozkaz[1], dla_adresu)) {
-		int a_logiczny = adres_logiczny(wykonywany_rozkaz[1]);
-		//int do_zapisania = czytaj_pamiec(currPCB, a_logiczny);
-		if (operacja == 1) {
-			//zapisz_do_pamieci(currPCB, a_logiczny, do_zapisania++);
+void inc_dec(int operation) {
+	if (regex_match(executed_order[1], for_address)) {
+		int log_addr = logical_address(executed_order[1]);
+		//int to_save = read_memory(currPCB, log_addr);
+		if (operation == 1) {
+			//write_memory(currPCB, log_addr, to_save++);
 		}
-		else if (operacja == 2) {
-			//zapisz_do_pamieci(currPCB, a_logiczny, do_zapisania--);
+		else if (operation == 2) {
+			//write_memory(currPCB, log_addr, to_save--);
 		}
 	}
-	else if (regex_match(wykonywany_rozkaz[1], dla_rejestru)) {
-		int do_zapisania = odczytaj_rejestr(wykonywany_rozkaz[1]);
+	else if (regex_match(executed_order[1], for_register)) {
+		int to_save = read_register(executed_order[1]);
 
-			 if (operacja == 1) zapisz_do_rejestru(wykonywany_rozkaz[1], do_zapisania++);
-		else if (operacja == 2) zapisz_do_rejestru(wykonywany_rozkaz[1], do_zapisania--);
+			 if (operation == 1) save_to_register(executed_order[1], to_save++);
+		else if (operation == 2) save_to_register(executed_order[1], to_save--);
 	}
 }
 
@@ -115,152 +123,137 @@ void ink_dek(int operacja) {
 //3 - większe
 //4 - mniejsze
 
-int skoki_warunkowe(int operacja) {
-	int l1, l2, l3; //l3 = czytaj_pamiec(currPCB, adres_logiczny(wykonywany_rozkaz[3]));
+int conditional_jumps(int operation) {
+	int l1, l2, l3; //l3 = read_memory(currPCB, logical_address(executed_order[3]));
 
-	if (regex_match(wykonywany_rozkaz[1], dla_adresu)) {
-		//l1 = czytaj_pamiec(currPCB, adres_logiczny(wykonywany_rozkaz[1]));
+	if (regex_match(executed_order[1], for_address)) {
+		//l1 = read_memory(currPCB, logical_address(executed_order[1]));
 	}
-	else if (regex_match(wykonywany_rozkaz[1], dla_wartosci))
-		l1 = stoi(wykonywany_rozkaz[1]);
+	else if (regex_match(executed_order[1], for_value))
+		l1 = stoi(executed_order[1]);
 
-	else if (regex_match(wykonywany_rozkaz[1], dla_rejestru))
-		l1 = odczytaj_rejestr(wykonywany_rozkaz[1]);
+	else if (regex_match(executed_order[1], for_register))
+		l1 = read_register(executed_order[1]);
 
 
-	if (regex_match(wykonywany_rozkaz[2], dla_adresu)) {
-		//l2 = czytaj_pamiec(currPCB, adres_logiczny(wykonywany_rozkaz[2]));
+	if (regex_match(executed_order[2], for_address)) {
+		//l2 = read_memory(currPCB, logical_address(executed_order[2]));
 	}
-	else if (regex_match(wykonywany_rozkaz[2], dla_wartosci))
-		l2 = stoi(wykonywany_rozkaz[2]);
+	else if (regex_match(executed_order[2], for_value))
+		l2 = stoi(executed_order[2]);
 
-	else if (regex_match(wykonywany_rozkaz[2], dla_rejestru))
-		l2 = odczytaj_rejestr(wykonywany_rozkaz[2]);
+	else if (regex_match(executed_order[2], for_register))
+		l2 = read_register(executed_order[2]);
 
-	switch (operacja) {
+	switch (operation) {
 	case 1:
-		if (l1 == l2) currPCB->l_rozkazow = l3;
+		if (l1 == l2) currPCB->done_task_num = l3;
 		break;
 	case 2:
-		if (l1 != l2) currPCB->l_rozkazow = l3;
+		if (l1 != l2) currPCB->done_task_num = l3;
 		break;
 	case 3:
-		if (l1 > l2) currPCB->l_rozkazow = l3;
+		if (l1 > l2) currPCB->done_task_num = l3;
 		break;
 	case 4:
-		if (l1 < l2) currPCB->l_rozkazow = l3;
+		if (l1 < l2) currPCB->done_task_num = l3;
 		break;
 	}
 }
 
-map<string, function<void()>> wykonanie = {
-	{"PN", []() {
-		int do_zapisania;
+void execution() {
+	string o = executed_order[0];
+	if (o == "PN") {
+		int to_save;
 
-		if (regex_match(wykonywany_rozkaz[2], dla_adresu)) {
-			//do_zapisania = czytaj_pamiec(currPCB, adres_logiczny(wykonywany_rozkaz[2]));
+		if (regex_match(executed_order[2], for_address)) {
+			//to_save = read_memory(currPCB, logical_address(executed_order[2]));
 		}
-		else if (regex_match(wykonywany_rozkaz[2], dla_wartosci))
-			do_zapisania = stoi(wykonywany_rozkaz[2]);
+		else if (regex_match(executed_order[2], for_value))
+			to_save = stoi(executed_order[2]);
 
-		else if (regex_match(wykonywany_rozkaz[2], dla_rejestru)) {
-			do_zapisania = odczytaj_rejestr(wykonywany_rozkaz[2]);
+		else if (regex_match(executed_order[2], for_register)) {
+			to_save = read_register(executed_order[2]);
 		}
 
-		if (regex_match(wykonywany_rozkaz[1], dla_adresu)) {
-			//zapisz_do_pamieci(currPCB, adres_logiczny(wykonywany_rozkaz[1]), do_zapisania);
+		if (regex_match(executed_order[1], for_address)) {
+			//write_memory(currPCB, logical_address(executed_order[1]), to_save);
 		}
-		else if (regex_match(wykonywany_rozkaz[1], dla_rejestru)) {
-			zapisz_do_rejestru(wykonywany_rozkaz[1], do_zapisania);
+		else if (regex_match(executed_order[1], for_register)) {
+			save_to_register(executed_order[1], to_save);
 		}
-	}},
-	{"DO", []() {
-		operacja_matematyczna(1);
-	}},
-	{"OD", []() {
-		operacja_matematyczna(2);
-	}},
-	{"MN", []() {
-		operacja_matematyczna(3);
-	}},
-	{"IK", []() {
-		ink_dek(1);
-	}},
-	{"DK", []() {
-		ink_dek(2);
-	}},
-	{"JR", []() {
-		skoki_warunkowe(1);
-	}},
-	{"JN", []() {
-		skoki_warunkowe(2);
-	}},
-	{"JW", []() {
-		skoki_warunkowe(3);
-	}},
-	{"JM", []() {
-		skoki_warunkowe(4);
-	}},
-	{"SK", []() {
-		currPCB->l_rozkazow = adres_logiczny(wykonywany_rozkaz[1]);
-	}},
-	{"ZT", []() {
+	}
+	else if (o == "DO")	math_operation(1);
+	else if (o == "OD") math_operation(2);
+	else if (o == "MN") math_operation(3);
+	else if (o == "IK") inc_dec(1);
+	else if (o == "DK") inc_dec(2);
+	else if (o == "JR") conditional_jumps(1);
+	else if (o == "JN") conditional_jumps(2);
+	else if (o == "JW") conditional_jumps(3);
+	else if (o == "JM") conditional_jumps(4);
+	else if (o == "SK") {
+		currPCB->done_task_num = logical_address(executed_order[1]);
+	}
+	else if (o == "ZT") {
 		//throw zatrzymujący proces
-	}},
-	{"OT", []() {
+	}
+	else if (o == "OT") {
+		//int id_pliku = open_file(executed_order[1], executed_order[3]);
+		//write_memory(currPCB, logical_address(executed_order[2]), id_pliku);
+	}
+	else if (o == "ZP") {
+		//int id_pliku = read_memory(currPCB, logical_address(executed_order[1]));
+		//pętla idąca przez pamięć, pobierająca do tablicy to, co ma zostać zapisane
+		//write_file(id_pliku, , executed_order[3]);
+	}
+	else if (o == "OP") {
+		//int id_pliku = read_memory(currPCB, logical_address(executed_order[1]));
+		//pętla odczytująca znak po znaku z pliku i zapisująca dane w RAMie
+		//read_file(id_pliku, );
+	}
+	else if (o == "ZM") {
+		//int id_pliku = read_memory(currPCB, logical_address(executed_order[1]));
+		//close_file(id_pliku);
+	}
+	else if (o == "TP") {
+	
+	}
+	else if (o == "UP") {
+	
+	}
+	else {
+		//Wyrzucić brak komendy
+	}
+}
 
-	}},
-	{"ZP", []() {
-
-	}},
-	{"OP", []() {
-
-	}},
-	{"ZM", []() {
-
-	}},
-
-	{"TP", []() {
-
-	}},
-	{"UP", []() {
-
-	}},
-	{"WD", []() {
-
-	}},
-	{"PD", []() {
-
-	}}
-};
-
-void zapisz_do_rejestru(string regTo, int value) {
+void save_to_register(string regTo, int value) {
 		 if (regTo == "A") currPCB->A = value;
 	else if (regTo == "B") currPCB->B = value;
 	else if (regTo == "C") currPCB->C = value;
 	else if (regTo == "D") currPCB->D = value;
 }
 
-int odczytaj_rejestr(string rejestr) {
-		 if (rejestr == "A") return currPCB->A;
-	else if (rejestr == "B") return currPCB->B;
-	else if (rejestr == "C") return currPCB->C;
-	else if (rejestr == "D") return currPCB->D;
+int read_register(string reg) {
+		 if (reg == "A") return currPCB->A;
+	else if (reg == "B") return currPCB->B;
+	else if (reg == "C") return currPCB->C;
+	else if (reg == "D") return currPCB->D;
 }
 
-vector<string> pobierz_bajty_z_pamieci(int ilosc) {
+vector<string> read_bytes(int amount) {
 	vector<string> dane;
-	for (int i = 0; i < ilosc; i++) {
+	for (int i = 0; i < amount; i++) {
 		string dana;
 
 		for (;;) {
-			int bajt;
-			//adres logiczny jest w: currPCB->l_rozkazow
-			//bajt = czytaj_rozkaz(currPCB);
-			currPCB->l_rozkazow++;
+			int byte;
+			//adres logiczny jest w: currPCB->done_task_num
+			//byte = read_memory(currPCB, currPCB->done_task_num);
+			currPCB->done_task_num++;
 
-			if ((char)bajt == ' ' || (char)bajt == ';') break;
-			dana.push_back(bajt);
+			if ((char)byte == ' ' || (char)byte == ';') break;
+			dana.push_back(byte);
 		}
 
 		dane.push_back(dana);
@@ -269,25 +262,24 @@ vector<string> pobierz_bajty_z_pamieci(int ilosc) {
 	return dane;
 }
 
-void interpretuj(PCB *pcb) {
+void interpret(PCB *pcb) {
 	currPCB = pcb;
 
 	vector<string> rozkaz {"NULL"};
 	
 	//Pobieramy nazwę instrukcji
-	rozkaz[0] = pobierz_bajty_z_pamieci(1)[0];
+	rozkaz[0] = read_bytes(1)[0];
 
-	//Dowiadujemy się z mapy ile argumentów ma dana instrukcja
-	int ilosc_bajtow = ilosc_arg[rozkaz[0]];
+	//Dowiadujemy się z mapy ile argumentów ma dana instrukcja bytes_amount
+	int bytes_amount = arg_amount[rozkaz[0]];
 
 	//Pobieramy argumenty z pamięci
-	for (auto argument : pobierz_bajty_z_pamieci(ilosc_bajtow))
+	for (auto argument : read_bytes(bytes_amount))
 		rozkaz.push_back(argument);
-	wykonywany_rozkaz = rozkaz;
+	executed_order = rozkaz;
 
 	//Wykonujemy fukcję przypisaną do danego rozkazu
-	wykonanie[rozkaz[0]]();
+	execution();
 
 	//oddajemy kontrolę po wykonaniu rozkazu
 }
-
