@@ -5,7 +5,7 @@
 
 using namespace std;
 
-enum State { UNDECLARED, RUNNABLE, SLEEPING, ZOMBIE, INIT };
+enum State{ UNDECLARED, RUNNING, SLEEPING, ZOMBIE, INIT };
 
 class PCB {
 public:
@@ -15,9 +15,18 @@ public:
 	State status;
 	int priority; // <100, 139>
 	int task_number;
+	int done_task_number;
+	float Q;
+	
+	PCB() { this->status = UNDECLARED; }
 
-	PCB() {}
-
+	PCB(int a) {
+		this->PID = a;
+		this->program_instructions = "";
+		this->process_name = "Dummy";
+		this->status = INIT;
+	}
+	
 	void print();
 	void set_state(State stat);
 };
@@ -29,7 +38,8 @@ public:
 	vector<Process_Tree*> children;
 
 	bool fork(PCB* proc, const string& name);
-
+	bool fork(PCB* proc, const string& name, const string& instructions);
+	
 	void values_enter(PCB& proc, const string& process_name);
 	PCB* find_process(const int& PID);
 	PCB* find_process(const string& name);

@@ -1,4 +1,5 @@
 ﻿#include "assembler.hpp"
+#include "../process_management/process_management.h"
 
 PCB *currPCB;
 vector<string> executed_order;

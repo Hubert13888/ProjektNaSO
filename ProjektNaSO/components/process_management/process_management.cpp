@@ -4,63 +4,84 @@ int available_pid = 2;
 vector<PCB*> PQ;
 
 void PCB::print() {
+	cout << "____________________" << endl;
 	cout << "PID = " << this->PID << endl;
-	cout << "name = " << this->process_name << endl;
-	cout << "state = " << this->status << endl;
+	cout << "Nazwa = " << this->process_name << endl;
+	if (this->status == 0) cout << "Status = UNDECLARED" << endl;
+	if (this->status == 1) cout << "Status = RUNNING" << endl;
+	if (this->status == 2) cout << "Status = SLEEPING" << endl;
+	if (this->status == 3) cout << "Status = ZOMBIE" << endl;
+	if (this->status == 4) cout << "Status = INIT" << endl;
+	cout << "Priorytet = " << this->priority << endl;
+	cout << "Nazwa pliku = " << this->program_instructions << endl;
+	cout << "____________________" << endl;
 
 }
 
+
 bool Process_Tree::fork(PCB* proc, const string& name) {
-	if (proc->PID == process.PID)
+	if (find_process(name))
 	{
-		Process_Tree* new_proc = new Process_Tree();
-		new_proc->daddy = proc;
-		values_enter(new_proc->process, name);
-		children.push_back(new_proc);
-		cout << "proces z inita" << endl;
+		cout << "Proces o danej nazwie juz istnieje" << endl;
+		return false;
 	}
 	else {
-		//szukanie procesu ktorego wskazalismy jako ojca wsrod potomkow procesu init
-		for (Process_Tree* temp1 : children)
+		if (proc->PID == process.PID)
 		{
-			if (temp1->process.PID == proc->PID)
+			Process_Tree* new_proc = new Process_Tree();
+			new_proc->daddy = proc;
+			values_enter(new_proc->process, name);
+			children.push_back(new_proc);
+			cout << "proces z inita" << endl;
+		}
+		else {
+			//szukanie procesu ktorego wskazalismy jako ojca wsrod potomkow procesu init
+			for (Process_Tree* temp1 : children)
 			{
-				Process_Tree* new_proc = new Process_Tree();
-				new_proc->daddy = proc;
-				values_enter(new_proc->process, name);
-				temp1->children.push_back(new_proc);
-				break;
-			}
-			//szukanie procesu ktorego wskazalismy jako ojca wsrod dzieci potomkow procesu init
-			else if (temp1->children.size() != 0)
-			{
-				for (Process_Tree* temp2 : temp1->children)
+				if (temp1->process.PID == proc->PID)
 				{
-					if (temp2->process.PID == proc->PID)
+					Process_Tree* new_proc = new Process_Tree();
+					new_proc->daddy = proc;
+					values_enter(new_proc->process, name);
+					temp1->children.push_back(new_proc);
+					break;
+				}
+				//szukanie procesu ktorego wskazalismy jako ojca wsrod dzieci potomkow procesu init
+				else if (temp1->children.size() != 0)
+				{
+					for (Process_Tree* temp2 : temp1->children)
 					{
-						Process_Tree* new_proc = new Process_Tree();
-						new_proc->daddy = proc;
-						values_enter(new_proc->process, name);
-						temp2->children.push_back(new_proc);
-						break;
+						if (temp2->process.PID == proc->PID)
+						{
+							Process_Tree* new_proc = new Process_Tree();
+							new_proc->daddy = proc;
+							values_enter(new_proc->process, name);
+							temp2->children.push_back(new_proc);
+							break;
+						}
 					}
 				}
 			}
 		}
+		return true;
 	}
-
-	return false;
 }
 
-void Process_Tree::values_enter(PCB& proc, const string& process_name) {
+//bool fork(PCB* proc, const string& name, const string& instructions) {
+//
+//}
+
+void Process_Tree::values_enter(PCB & proc, const string & process_name) {
 	proc.PID = available_pid;
 	available_pid++;
 	proc.process_name = process_name;
+	proc.program_instructions = "";
+	proc.priority = 120;
 	proc.status = UNDECLARED;
 	proc.task_number = 0;
 }
 
-PCB* Process_Tree::find_process(const int& PID) {
+PCB* Process_Tree::find_process(const int& PID){
 	if (process.PID == PID)
 	{
 		return &process;
@@ -103,5 +124,47 @@ PCB* Process_Tree::find_process(const string& name) {
 			if (foundPCB != nullptr)return foundPCB;
 		}
 		return nullptr;
+	}
+}
+
+
+void PCB::set_state(State stat) {
+	switch (stat) {
+	case UNDECLARED:
+	{
+		this->status = stat;
+		break;
+	}
+	case RUNNING:
+	{
+		if (this->status == SLEEPING || this->status == RUNNING) break;
+		else
+		{
+			this->status = SLEEPING;
+			PQ.push_back(this);
+			break;
+		}
+	}
+	case SLEEPING:
+	{
+		if (this->status == SLEEPING || this->status == RUNNING) break;
+		else
+		{
+			this->status = SLEEPING;
+			PQ.push_back(this);
+			break;
+		}
+	}
+	case ZOMBIE:
+	{
+		auto it = find(PQ.begin(), PQ.end(), this);
+		if (it != PQ.end()) {
+			this->status = ZOMBIE;
+		}
+		else {
+			PQ.erase(it);
+			this->status = ZOMBIE;
+		}
+	}
 	}
 }
