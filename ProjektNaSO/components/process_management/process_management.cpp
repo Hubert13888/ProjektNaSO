@@ -150,9 +150,12 @@ void PCB::set_state(State stat) {
 		if (this->status == SLEEPING || this->status == RUNNING) break;
 		else
 		{
-			this->status = SLEEPING;
-			PQ.push_back(this);
-			break;
+			if (this->process_name != "") {
+				this->status = SLEEPING;
+				PQ.push_back(this);
+				break;
+			}
+			else break;
 		}
 	}
 	case ZOMBIE:
