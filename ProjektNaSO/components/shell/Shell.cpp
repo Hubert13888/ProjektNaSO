@@ -533,9 +533,3 @@ void Shell::run()
 	std::cout << green << "Wylaczanie systemu..." << white;
 	Sleep(1500);
 }
-
-int main()
-{
-	Shell shell;
-	shell.run();
-}

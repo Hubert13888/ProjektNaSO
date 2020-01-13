@@ -18,7 +18,10 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="process_management.h">
+    <ClInclude Include="components\shell\Colors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\shell\Shell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -29,7 +32,7 @@
     <ClCompile Include="ProjektNaSO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="process_management.cpp">
+    <ClCompile Include="components\shell\Shell.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
