@@ -1,5 +1,6 @@
 #include "dysk.h"
 #include "iostream"
+#include "../locks/lock.h"
 
 
 
@@ -31,6 +32,7 @@ void dysk::utworzPlik(string nazwa, string rozszerzenie, string nazwaFolderu) //
 	if (znajdzPlik(nazwa, rozszerzenie) == -1 && znajdzFolder(nazwaFolderu) != -1) {// jest folder nie ma pliku
 
 		if (wolneBloki != 0){//jezli wolne bloki
+			Lock *l = new Lock();
 			short iWezel = znajdzIwezel();//pomocnicze
 			tablicaKatalogow[znajdzFolder(nazwaFolderu)].dodajNumerIwezela(iWezel);//dodanie nr iwezla do tablicy kat
 			wektorBitowy[znajdzWolnyBlok()] = false; // zmiana wektora bitowego na zajety
@@ -119,6 +121,7 @@ void dysk::usunPlik(string nazwa, string rozszerzenie, string nazwaFolderu)
 		cout << "Nie znaleziono folderu o podanej nazwie" << endl;
 	}
 	if (znajdzPlik(nazwa, rozszerzenie) != -1 && znajdzFolder(nazwaFolderu) != -1){ //jezli isteje plik/katalog o danej nazwie
+		
 		tablicaDysk[tablicaIwezlow[znajdzPlik(nazwa, rozszerzenie)].pobierzPierwszyBlok() * 32] = '0';//ustawianie danego miejsca w tablicy dyskowej na 0
 		wektorBitowy[tablicaIwezlow[znajdzPlik(nazwa, rozszerzenie)].pobierzPierwszyBlok()] = true;// uzupenienie wektora bitowego w odpowiendim miejcu na wolny czyli true czyli 1
 		tablicaIwezlow[znajdzPlik(nazwa, rozszerzenie)].czysc();//czysczenie odpowiedniego miejsca w tablicy iwezlow

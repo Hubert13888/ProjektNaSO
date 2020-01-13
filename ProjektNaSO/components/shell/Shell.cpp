@@ -3,6 +3,9 @@
 #include <iomanip>
 #include <sstream>
 #include <iterator>
+#include "../locks/lock.h"
+#include "../process_management/process_management.h"
+#include "../files/dysk.h"
 
 //KONWERSJA INPUT (STRING) NA VECTOR CMD
 std::vector<std::string> Shell::make_cmd(std::string input)
@@ -109,7 +112,7 @@ void Shell::run_function(std::vector<std::string> cmd)
 			}
 			else
 			{
-				//Stworz plik - Koziołek
+				dysk::utworzPlik(cmd[1], cmd[2], cmd[3]);
 				std::cout << green << "[SHELL]" << white << " - Utworzono plik : " << cmd[1] << std::endl;
 			}
 		}
@@ -128,7 +131,6 @@ void Shell::run_function(std::vector<std::string> cmd)
 			}
 			else if(/*Sprawdzenie czy taki plik istnieje*/ running)
 			{
-				//Usuń plik - Koziołek
 				std::cout << green << "[SHELL]" << white << " - Usunieto plik : " << cmd[1] << std::endl;
 			}
 			else
@@ -153,6 +155,10 @@ void Shell::run_function(std::vector<std::string> cmd)
 			}
 			else if(/*sprawdzenie czy taki plik istnieje*/ running)
 			{
+		
+				Lock *l = new Lock();
+				PCB *p = new PCB();
+				
 				//Otwórz plik - Koziołek
 			}
 			else

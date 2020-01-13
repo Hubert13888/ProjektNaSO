@@ -6,27 +6,27 @@ class iWezel
 {
 public:
 	iWezel();
-	void wypiszIwezel();
+	static void wypiszIwezel();
 
 #pragma region operacje na zmmiennych prywatnych
-	void czysc(); // Zwalnianie struktury
+	static void czysc(); // Zwalnianie struktury
 
-	void ustawRozmiarPliku(short rozmiar);
-	int pobierzRozmiarPliku();
+	static void ustawRozmiarPliku(short rozmiar);
+	static int pobierzRozmiarPliku();
 
-	void ustawPierwszyBlok(short blok);
-	short pobierzPierwszyBlok();
+	static void ustawPierwszyBlok(short blok);
+	static short pobierzPierwszyBlok();
 
-	void ustawDrugiBlok(short blok);
-	short pobierzDrugiBlok();
+	static void ustawDrugiBlok(short blok);
+	static short pobierzDrugiBlok();
 
-	void ustawIndeksowyBlok(short blok);
-	short pobierzIndeksowyBlok();
+	static void ustawIndeksowyBlok(short blok);
+	static short pobierzIndeksowyBlok();
 #pragma endregion operacje na zmmiennych prywatnych
 
 private:
-	int rozmiarPliku;
-	short pierwszyBlok;
-	short drugiBlok;
-	short indeksowyBlok;
+	static int rozmiarPliku;
+	static short pierwszyBlok;
+	static short drugiBlok;
+	static short indeksowyBlok;
 };
