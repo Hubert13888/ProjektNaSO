@@ -1,3 +1,0 @@
-MOV AX, 60h
-MOV BX, 20h
-ADD AX, AB
