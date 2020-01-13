@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "stdafx.h"
 #include <array>
 #include <iostream>
 using namespace std;
@@ -22,7 +21,7 @@ public:
 	void ustawOjca(short ojciec);
 	short pobierzOjca();
 	void ustawSyna(short syn);
-	array<short, 32> pobierzSynow(); // Zwraca kolekcjê podfolderów
+	array<short, 32> pobierzSynow(); // Zwraca kolekcjï¿½ podfolderï¿½w
 	void usunSyna(short syn);
 	short ilePodfolderow();
 	void ustawPodfoldery(int i);

@@ -1,5 +1,4 @@
 #include "iwezel.h"
-#include "stdafx.h"
 #include <cstdio>
 
 iWezel::iWezel()

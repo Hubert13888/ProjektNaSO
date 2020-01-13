@@ -1,5 +1,4 @@
-#include "stdafx.h"
-#include "katalog.h"		
+#include "katalog.h"
 #include <iostream>
 
 katalog::katalog()
