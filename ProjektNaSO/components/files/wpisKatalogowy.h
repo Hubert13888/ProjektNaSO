@@ -8,16 +8,16 @@ class wpis
 public:
 	wpis();
 	wpis(string nazwa, string rozszerzenie, short numer);
-	void czysc();
-	void wypisz();
-	void ustawNazwe(string nazwa);
-	string pobierzNazwe();
-	void ustawRozszrzenie(string rozszerzenie);
-	string pobierzRozszerzenie();
-	void ustawNumerIwezla(short numer);
-	short pobierzNumer();
+	static void czysc();
+	static void wypisz();
+	static void ustawNazwe(string nazwa);
+	static string pobierzNazwe();
+	static void ustawRozszrzenie(string rozszerzenie);
+	static string pobierzRozszerzenie();
+	static void ustawNumerIwezla(short numer);
+	static short pobierzNumer();
 private:
-	string nazwa;
-	string rozszerzenie;
-	short numerIwezela;
+	static string nazwa;
+	static string rozszerzenie;
+	static short numerIwezela;
 };
