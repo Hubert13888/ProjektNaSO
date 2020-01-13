@@ -6,12 +6,6 @@
 
 using namespace std;
 
-//Tymczasowy obiekt PCB
-class PCB {
-public:
-	int A, B, C, D, order_counter;
-};
-
 int logical_address(string argument);
 
 void math_operation(int operacja);
