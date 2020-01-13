@@ -4,6 +4,10 @@
 #include <string>
 #include <regex>
 
+#include "../memmory/paging.h"
+#include "../process_management/process_management.h"
+#include "../files/dysk.h"
+
 using namespace std;
 
 int logical_address(string argument);
