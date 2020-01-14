@@ -1,11 +1,10 @@
 ﻿#include "assembler.hpp"
-#include "../process_management/process_management.h"
 
 PCB *currPCB;
 vector<string> executed_order;
 
-regex for_value("[\d]+");
-regex for_address("[\[]([0-9]+|[A-D]+)[\]]");
+regex for_value("[\\d]+");
+regex for_address("[\\[]([0-9]+|[A-D]+)[\\]]");
 regex for_register("[ABCD]");
 regex for_state("[.][a-z]");
 
@@ -36,9 +35,10 @@ map<string, int> arg_amount = {
 };
 
 int logical_address(string argument) {
+
 	string number;
 	string registers[4] = { "A", "B", "C", "D" };
-	for (int i = 1; i < argument.length() - 2; i++)
+	for (int i = 1; i < argument.length() - 1; i++)
 		number.push_back(argument[i]);
 
 	for (auto reg : registers)
@@ -57,7 +57,7 @@ void math_operation(int operation) {
 	int l1, l2;
 
 	if (regex_match(executed_order[2], for_address)) {
-		//l1 = read_memory(currPCB, logical_address(executed_order[2]));
+		l1 = paging::readM(currPCB->pid, logical_address(executed_order[2]));
 	}
 	else if (regex_match(executed_order[2], for_value))
 		l1 = stoi(executed_order[2]);
@@ -66,7 +66,7 @@ void math_operation(int operation) {
 		l1 = read_register(executed_order[2]);
 
 	if (regex_match(executed_order[1], for_address)) {
-		//l2 = read_memory(currPCB, logical_address(executed_order[1]));
+		l2 = paging::readM(currPCB->pid, logical_address(executed_order[1]));
 
 		switch (operation) {
 		case 1:
@@ -82,7 +82,6 @@ void math_operation(int operation) {
 	}
 	else if (regex_match(executed_order[1], for_register)) {
 		l2 = read_register(executed_order[1]);
-
 		switch (operation) {
 		case 1:
 			save_to_register(executed_order[1], l2+l1);
@@ -103,19 +102,19 @@ void math_operation(int operation) {
 void inc_dec(int operation) {
 	if (regex_match(executed_order[1], for_address)) {
 		int log_addr = logical_address(executed_order[1]);
-		//int to_save = read_memory(currPCB, log_addr);
+		int to_save = paging::readM(currPCB->pid, log_addr);
 		if (operation == 1) {
-			//write_memory(currPCB, log_addr, to_save++);
+			paging::writeM(currPCB->pid, log_addr, to_save+1);
 		}
 		else if (operation == 2) {
-			//write_memory(currPCB, log_addr, to_save--);
+			paging::writeM(currPCB->pid, log_addr, to_save-1);
 		}
 	}
 	else if (regex_match(executed_order[1], for_register)) {
 		int to_save = read_register(executed_order[1]);
 
-			 if (operation == 1) save_to_register(executed_order[1], to_save++);
-		else if (operation == 2) save_to_register(executed_order[1], to_save--);
+			 if (operation == 1) save_to_register(executed_order[1], to_save+1);
+		else if (operation == 2) save_to_register(executed_order[1], to_save-1);
 	}
 }
 
@@ -124,11 +123,11 @@ void inc_dec(int operation) {
 //3 - większe
 //4 - mniejsze
 
-int conditional_jumps(int operation) {
-	int l1, l2, l3; //l3 = read_memory(currPCB, logical_address(executed_order[3]));
-
+void conditional_jumps(int operation) {
+	int l1, l2, l3 = logical_address(executed_order[3]);
+	
 	if (regex_match(executed_order[1], for_address)) {
-		//l1 = read_memory(currPCB, logical_address(executed_order[1]));
+		l1 = paging::readM(currPCB->pid, logical_address(executed_order[1]));
 	}
 	else if (regex_match(executed_order[1], for_value))
 		l1 = stoi(executed_order[1]);
@@ -136,16 +135,16 @@ int conditional_jumps(int operation) {
 	else if (regex_match(executed_order[1], for_register))
 		l1 = read_register(executed_order[1]);
 
-
+	
 	if (regex_match(executed_order[2], for_address)) {
-		//l2 = read_memory(currPCB, logical_address(executed_order[2]));
+		l2 = paging::readM(currPCB->pid, logical_address(executed_order[2]));
 	}
 	else if (regex_match(executed_order[2], for_value))
 		l2 = stoi(executed_order[2]);
 
 	else if (regex_match(executed_order[2], for_register))
 		l2 = read_register(executed_order[2]);
-
+	
 	switch (operation) {
 	case 1:
 		if (l1 == l2) currPCB->done_task_num = l3;
@@ -168,23 +167,24 @@ void execution() {
 		int to_save;
 
 		if (regex_match(executed_order[2], for_address)) {
-			//to_save = read_memory(currPCB, logical_address(executed_order[2]));
+			to_save = paging::readM(currPCB->pid, logical_address(executed_order[2]));
 		}
-		else if (regex_match(executed_order[2], for_value))
+		else if (regex_match(executed_order[2], for_value)) {
 			to_save = stoi(executed_order[2]);
+		}
 
 		else if (regex_match(executed_order[2], for_register)) {
 			to_save = read_register(executed_order[2]);
 		}
 
 		if (regex_match(executed_order[1], for_address)) {
-			//write_memory(currPCB, logical_address(executed_order[1]), to_save);
+			paging::writeM(currPCB->pid, logical_address(executed_order[1]), to_save);
 		}
 		else if (regex_match(executed_order[1], for_register)) {
 			save_to_register(executed_order[1], to_save);
 		}
 	}
-	else if (o == "DO")	math_operation(1);
+	else if (o == "DD")	math_operation(1);
 	else if (o == "OD") math_operation(2);
 	else if (o == "MN") math_operation(3);
 	else if (o == "IK") inc_dec(1);
@@ -233,13 +233,18 @@ void save_to_register(string regTo, int value) {
 	else if (regTo == "B") currPCB->B = value;
 	else if (regTo == "C") currPCB->C = value;
 	else if (regTo == "D") currPCB->D = value;
+	else {
+		throw "NOREGISTER";
+	}
 }
 
 int read_register(string reg) {
 		 if (reg == "A") return currPCB->A;
 	else if (reg == "B") return currPCB->B;
 	else if (reg == "C") return currPCB->C;
-	else if (reg == "D") return currPCB->D;
+	else if (reg == "D") return currPCB->D; 
+	
+	throw "NOREGISTER";
 }
 
 vector<string> read_bytes(int amount) {
@@ -248,12 +253,11 @@ vector<string> read_bytes(int amount) {
 		string dana;
 
 		for (;;) {
-			int byte;
+			char byte;
 			//adres logiczny jest w: currPCB->done_task_num
-			//byte = read_memory(currPCB, currPCB->done_task_num);
+			byte = paging::readM(currPCB->pid, currPCB->done_task_num);
 			currPCB->done_task_num++;
-
-			if ((char)byte == ' ' || (char)byte == ';') break;
+			if (byte == ' ' || (byte == ';')) break;
 			dana.push_back(byte);
 		}
 
@@ -270,6 +274,8 @@ void interpret(PCB *pcb) {
 	
 	//Pobieramy nazwę instrukcji
 	rozkaz[0] = read_bytes(1)[0];
+
+	paging::display();
 
 	//Dowiadujemy się z mapy ile argumentów ma dana instrukcja bytes_amount
 	int bytes_amount = arg_amount[rozkaz[0]];

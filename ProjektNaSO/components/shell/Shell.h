@@ -2,7 +2,12 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "../memmory/paging.h"
 
+class PCB {
+public:
+	int pid, A, B, C, D, done_task_num;
+};
 
 class Shell
 {

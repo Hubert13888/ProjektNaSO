@@ -3,6 +3,11 @@
 #include <iomanip>
 #include <sstream>
 #include <iterator>
+#include <fstream>
+
+#include "../assembler/assembler.hpp"
+
+using namespace std;
 
 //KONWERSJA INPUT (STRING) NA VECTOR CMD
 std::vector<std::string> Shell::make_cmd(std::string input)
@@ -99,178 +104,13 @@ void Shell::run_function(std::vector<std::string> cmd)
 		//Execute(); - wykonanie kroku (Hubert?)
 		return;
 	}
-	//ZARZADZANIE PLIKAMI
-	//Tworzenie pliku
-	else if (cmd[0] == "touch")
-	{
-		if (cmd.size() == 2) {
-			if (cmd[1] == "-h") {
-				std::cout << "\n" << cmd[0] << " " << "[nazwa_pliku]\n";
-			}
-			else
-			{
-				//Stworz plik - Koziołek
-				std::cout << green << "[SHELL]" << white << " - Utworzono plik : " << cmd[1] << std::endl;
-			}
-		}
-		else
-		{
-			std::cout << red << "[SHELL]" << white << " - Niepoprawna liczba argumentow!" << std::endl;
-			std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
-		}
-	}
-	//Usuwanie pliku
-	else if(cmd[0] == "rm")
-	{
-		if (cmd.size() == 2) {
-			if (cmd[1] == "-h") {
-				std::cout << "\n" << cmd[0] << " " << "[nazwa_pliku]\n";
-			}
-			else if(/*Sprawdzenie czy taki plik istnieje*/ running)
-			{
-				//Usuń plik - Koziołek
-				std::cout << green << "[SHELL]" << white << " - Usunieto plik : " << cmd[1] << std::endl;
-			}
-			else
-			{
-				std::cout << red << "[SHELL]" << white << " - Podany plik nie istnieje!" << std::endl;
-			}
-		}
-		else
-		{
-			std::cout << red << "[SHELL]" << white << " - Niepoprawna liczba argumentow!" << std::endl;
-			std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
-		}
-	}
-	//Otwarcie pliku
-	else if(cmd[0] == "cat")
-	{
-		if(cmd.size() == 2)
-		{
-			if(cmd[1] == "-h")
-			{
-				std::cout << "\n" << cmd[0] << " " << "[nazwa_pliku]\n";
-			}
-			else if(/*sprawdzenie czy taki plik istnieje*/ running)
-			{
-				//Otwórz plik - Koziołek
-			}
-			else
-			{
-				std::cout << red <<  "[SHELL]" << white << " - Podany plik nie istnieje!" << std::endl;
-			}
-		}
-		else
-		{
-			std::cout << red << "[SHELL]" << white << " - Niepoprawna liczba argumentow!" << std::endl;
-			std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
-		}
-	}
-	//ZARZĄDZANIE KATALOGAMI
-	//Listowanie katalogu
-	else if(cmd[0] == "ls")
-	{
-		if (cmd.size() == 1)
-		{
-			//Listuj katalog
-		}
-		else if (cmd.size() == 2)
-		{
-			if(cmd[1] == "-h")
-			{
-				std::cout << "\n" << cmd[0] << " " << "[]\n";
-			}
-			else
-			{
-				std::cout << red << "[SHELL]" << white << " - Niepoprawny argument!" << std::endl;
-				std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
-			}
-		}
-		else
-		{
-			std::cout << red << "[SHELL]" << white << " - Niepoprawna liczba argumentow!" << std::endl;
-			std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
-		}
-	}
-	//Stworz folder
-	else if (cmd[0] == "mkdir")
-	{
-		if (cmd.size() == 2)
-		{
-			if (cmd[1] == "-h")
-			{
-				std::cout << "\n" << cmd[0] << " " << "[nazwa_folderu]\n";
-			}
-			else if (/*sprawdzenie czy istnieje katalog o tej nazwie*/ running)
-			{
-				//Stwórz katalog - Koziołek
-			}
-			else
-			{
-				std::cout << red << "[SHELL]" << white << " - Taki katalog juz istnieje!" << std::endl;
-			}
-		}
-		else
-		{
-			std::cout << red << "[SHELL]" << white << " - Niepoprawna liczba argumentow!" << std::endl;
-			std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
-		}
-	}
-	//Usun folder
-	else if (cmd[0] == "rmdir")
-	{
-	if (cmd.size() == 2)
-	{
-		if (cmd[1] == "-h")
-		{
-			std::cout << "\n" << cmd[0] << " " << "[nazwa_folderu]\n";
-		}
-		else if (/*sprawdzenie czy katalog istnieje*/ running)
-		{
-			//Usun katalog - Koziołek
-		}
-		else
-		{
-			std::cout << red << "[SHELL]" << white << " - Podany katalog nie istnieje!" << std::endl;
-		}
-	}
-	else
-	{
-		std::cout << red << "[SHELL]" << white << " - Niepoprawna liczba argumentow!" << std::endl;
-		std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
-	}
-	}
-	//Przejdz do folderu
-	else if (cmd[0] == "cd")
-	{
-	if (cmd.size() == 2)
-	{
-		if (cmd[1] == "-h")
-		{
-			std::cout << "\n" << cmd[0] << " " << "[nazwa_folderu]\n";
-		}
-		else if (/*sprawdzenie czy katalog istnieje*/ running)
-		{
-			//Przejdz do katalogu - Koziołek
-		}
-		else
-		{
-			std::cout << red << "[SHELL]" << white << " - Podany katalog nie istnieje!" << std::endl;
-		}
-	}
-	else
-	{
-		std::cout << red << "[SHELL]" << white << " - Niepoprawna liczba argumentow!" << std::endl;
-		std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
-	}
-	}
-	//DYSK OGÓLNIE - CZYJE?
+	
 	//PAMIĘĆ RAM
 	else if (cmd[0] == "meminfo")
 	{
 	if (cmd.size() == 1)
 	{
-		//Wyswietlanie pamieci - Mikołaj
+		paging::display();//Wyswietlanie pamieci - Mikołaj
 	}
 	else if (cmd.size() == 2)
 	{
@@ -299,6 +139,7 @@ void Shell::run_function(std::vector<std::string> cmd)
 			if (cmd[1] == "-h")
 			{
 				std::cout << "\n" << cmd[0] << " " << "[nazwa_procesu][nazwa_pliku]\n";
+
 			}
 			else
 			{
@@ -308,9 +149,19 @@ void Shell::run_function(std::vector<std::string> cmd)
 		}
 		else if (cmd.size() == 3)
 		{
-			if(/*sprawdzenie poprawnosci nazwy pliku i procesu*/ running)
+			if(true)
 			{
-				//Stworz proces i nadaj mu instrukcje z pliku
+				string plik = "PN A 5;DD B 5;JR A B [7];";
+				for(int i=0; i< plik.length(); i++) {
+					paging::writeM(1, i, plik[i]);
+				}
+				PCB super_proces{1, 0, 0, 0 ,0, 0 };
+				interpret(&super_proces);
+				interpret(&super_proces);
+				interpret(&super_proces);
+				interpret(&super_proces);
+				//interpret(&super_proces);
+				cout << read_register("B");
 			}
 			else if(/*plik nie istnieje lub cos innego mu nie gra*/ running)
 			{
@@ -371,7 +222,7 @@ void Shell::run_function(std::vector<std::string> cmd)
 			}
 			else if (/*sprawdzenie poprawnosci nazwy procesu*/ running)
 			{
-				//Uruchom proces
+				cout << "dsafasdf";
 			}
 			else
 			{

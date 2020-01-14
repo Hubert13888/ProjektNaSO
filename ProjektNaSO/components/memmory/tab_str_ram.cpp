@@ -1,6 +1,10 @@
 #include "tab_str_ram.h"
 #include <iostream>
 
+std::tuple<int, int, int>tab_str_ram::pageAr[32];
+int tab_str_ram::rNr;
+std::array<char, 512> tab_str_ram::ramAr;
+
 tab_str_ram::tab_str_ram()
 {
 	for (int i = 0; i < 32; i++)
@@ -52,6 +56,7 @@ void tab_str_ram::writeM(int pid, int adrP, int offset, char data)
 
 char tab_str_ram::readM(int pid, int adrP, int offset)
 {
+	char val;
 	if (checkPageArR(pid, adrP) == true) {
 		val = ramAr[findAdr(adrP, offset)];
 	}

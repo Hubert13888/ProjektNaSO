@@ -1,10 +1,14 @@
-﻿#include <map>
+﻿#pragma once
+
+#include <map>
 #include <vector>
 #include <functional>
 #include <string>
 #include <regex>
+#include "../shell/Shell.h"
 
 using namespace std;
+
 
 int logical_address(string argument);
 
@@ -12,7 +16,7 @@ void math_operation(int operacja);
 
 void inc_dec(int operacja);
 
-int conditional_jumps(int operacja);
+void conditional_jumps(int operacja);
 
 void save_to_register(string regFrom, int value);
 
