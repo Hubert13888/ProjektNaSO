@@ -1,5 +1,6 @@
 ﻿#include "Shell.h"
 #include "Colors.h"
+#include "../memmory/paging.h"
 #include <iomanip>
 #include <sstream>
 #include <iterator>
@@ -8,6 +9,8 @@
 #include "../assembler/assembler.hpp"
 
 using namespace std;
+
+paging m;
 
 //KONWERSJA INPUT (STRING) NA VECTOR CMD
 std::vector<std::string> Shell::make_cmd(std::string input)

@@ -1,36 +1,42 @@
+//
+// Created by Celestyna on 09.01.2020.
+//
 #pragma once
-#include <iostream>
 #include <queue>
+#include <vector>
+#include "../process_management/process_management.h" // z tego pliku (od Krzysia) klasa Lock i jej funkcje beda pobieraƒá klase PCB
 
 class Lock
 {
-protected:
-
-	bool lock_open;
-	PCB* process_id; //PCB - identyfikator procesu
-	std::queue<PCB*> lock_queue; 
-
 public:
 
-	Lock();
+    bool is_lock_open; // informacja czy zamek jest zamkniety czy otwarty | 0 - zamkniety, 1 - otwarty
+    PCB* who_closed_lock; // Zmienna mowiaca ktory proces zamknal zamek, PCB - identyfikator procesu
+    std::vector<PCB*> processes_queue; //kolejka przechowujƒÖca oczekujace procesy
 
-	bool get_lock_open();
 
-	PCB* get_process_id(); //przydatne przy wybudzaniu
 
-	int get_queue_size(); //rozmiar kolejki - jesli wiekszy od 0 to zamek zamkniety, a jezeli rowny 0, to otwiera zamek
+    Lock(); // konstruktor domy≈õlny klasy Lock
 
-	void set_lock_open(bool b); //ustawiam stan zamka
+    bool get_is_open();
 
-	void set_process_id(PCB* process); //ustawiam kto go zamknal
+    PCB* get_who_closed_lock(); //funkcja pobiera informacje o tym kto zamknal zamek - przydatne przy wybudzaniu, gdyz tylko ten proces ktory zamek zamknal moze go otworzyc
 
-	bool add_to_lock_queue(PCB *process); // dodaj proces do kolejki (ten co chce zamknπc i nie moøe, czyli oczekuje)
+    int get_processes_queue_size(); //pobiera rozmiar kolejki - jesli wiekszy od 0 to zamek jest ciagle zamkniety tylko zmienia "proces-klucznika", a jezeli rowny 0, to otwiera zamek
 
-	PCB* remove_from_lock_queue(); //usun z kolejki pierwszy proces ktory czeka≥
+    void set_is_lock_open(bool b); //ustawia stan zamka
+
+    void set_who_closed_lock(PCB* process); //ustawia kto zamknal zamek - to bardzo wazne zeby wiedziec ktory proces ostatnio by≈Ç procesem-klucznikiem
+
+    bool add_to_processes_queue(PCB *process); // dodaj proces do kolejki (ten co chce zamknac i nie moze (bo ktos inny zamyka), czyli oczekuje)
+
+    PCB* remove_from_processes_queue(); //usuwa z kolejki pierwszy proces ktory czekal na przydzia≈Ç do danych wspoldzielonych - ten proces ropoczyna operacje zamykania zamka
 
 };
 
 
-void lock_lock(Lock *l, PCB *process); // zamyka zamek
+void lock_lock(Lock *lock, PCB *process); // zamykanie zamka
 
-void lock_unlock(Lock *l); //otwiera zamek
+void unlock_lock(Lock *lock, PCB *process); //otwieranie zamka
+
+void unlock(Lock *lock, PCB *process);

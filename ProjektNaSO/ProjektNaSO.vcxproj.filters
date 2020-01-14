@@ -24,6 +24,30 @@
     <ClInclude Include="components\shell\Shell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="components\memmory\paging.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\memmory\tab_str_ram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\assembler\assembler.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\files\dysk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\files\iwezel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\files\katalog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\files\wpisKatalogowy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\process_management\process_management.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -33,6 +57,30 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="components\shell\Shell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="components\memmory\paging.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="components\memmory\tab_str_ram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="components\assembler\assembler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="components\files\dysk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="components\files\iwezel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="components\files\katalog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="components\files\wpisKatalogowy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="components\process_management\process_management.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

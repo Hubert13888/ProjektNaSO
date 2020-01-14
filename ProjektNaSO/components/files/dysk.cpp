@@ -1,7 +1,16 @@
 #include "dysk.h"
 #include "iostream"
+#include "../locks/lock.h"
 
-
+array<iWezel, 32> dysk::tablicaIwezlow;
+array<char, 1024> dysk::tablicaDysk;
+array<katalog, 1024> dysk::tablicaKatalogow;
+array<wpis, 32> dysk::tablicaWpisow;
+array<bool, 32> dysk::wektorBitowy;
+short dysk::wielkoscBloku;
+int dysk::wielkoscDysku;
+short dysk::wolneBloki;
+int dysk::ileFolderow;
 
 
 dysk::dysk()
@@ -30,7 +39,8 @@ void dysk::utworzPlik(string nazwa, string rozszerzenie, string nazwaFolderu) //
 	}
 	if (znajdzPlik(nazwa, rozszerzenie) == -1 && znajdzFolder(nazwaFolderu) != -1) {// jest folder nie ma pliku
 
-		if (wolneBloki != 0){//jezli wolne bloki
+		if (wolneBloki != 0){//jezeli wolne bloki
+			Lock *l = new Lock();
 			short iWezel = znajdzIwezel();//pomocnicze
 			tablicaKatalogow[znajdzFolder(nazwaFolderu)].dodajNumerIwezela(iWezel);//dodanie nr iwezla do tablicy kat
 			wektorBitowy[znajdzWolnyBlok()] = false; // zmiana wektora bitowego na zajety
@@ -58,7 +68,7 @@ void dysk::zapiszDoPliku(string nazwa, string rozszerzenie, string dane, string 
 		cout << "Nie znaleziono folderu o podnaej nazwie" << endl;
 	}
 	if (znajdzPlik(nazwa, rozszerzenie) != -1 && znajdzFolder(nazwaFolderu) != -1){//jesli znaleziono plik i folder
-		for (int i = 0; i<dane.length(); i++){//rob tak dlugo jak dlufie sa dane
+		for (int i = 0; i<dane.length(); i++){//rob tak dlugo jak dlugie sa dane
 			if (tablicaIwezlow[pozycjaPliku].pobierzRozmiarPliku() < 32){ //pierwszy przypadek jesli dane maja miec 32 bity, jeden bezposredni wskaznik na blok dyskowy
 				tablicaDysk[tablicaIwezlow[pozycjaPliku].pobierzPierwszyBlok()*wielkoscBloku + tablicaIwezlow[pozycjaPliku].pobierzRozmiarPliku()] = dane[i]; //wypelnianie dysku znak pozaku
 				tablicaIwezlow[pozycjaPliku].ustawRozmiarPliku(tablicaIwezlow[pozycjaPliku].pobierzRozmiarPliku() + 1); //powiekszanie rozmairu pliku o jeden
@@ -112,13 +122,14 @@ void dysk::zapiszDoPliku(string nazwa, string rozszerzenie, string dane, string 
 
 void dysk::usunPlik(string nazwa, string rozszerzenie, string nazwaFolderu)
 {
-	if (znajdzPlik(nazwa, rozszerzenie) == -1){//sprawdzanie czy isteniejeplik/katalo g o danej nazwie
+	if (znajdzPlik(nazwa, rozszerzenie) == -1){//sprawdzanie czy isteniejeplik/katalog o danej nazwie
 		cout << "Nie znaleziono pliku o podanej nazwie" << endl;
 	}
 	if (znajdzFolder(nazwaFolderu) == -1){
 		cout << "Nie znaleziono folderu o podanej nazwie" << endl;
 	}
 	if (znajdzPlik(nazwa, rozszerzenie) != -1 && znajdzFolder(nazwaFolderu) != -1){ //jezli isteje plik/katalog o danej nazwie
+		//lock_lock()
 		tablicaDysk[tablicaIwezlow[znajdzPlik(nazwa, rozszerzenie)].pobierzPierwszyBlok() * 32] = '0';//ustawianie danego miejsca w tablicy dyskowej na 0
 		wektorBitowy[tablicaIwezlow[znajdzPlik(nazwa, rozszerzenie)].pobierzPierwszyBlok()] = true;// uzupenienie wektora bitowego w odpowiendim miejcu na wolny czyli true czyli 1
 		tablicaIwezlow[znajdzPlik(nazwa, rozszerzenie)].czysc();//czysczenie odpowiedniego miejsca w tablicy iwezlow
