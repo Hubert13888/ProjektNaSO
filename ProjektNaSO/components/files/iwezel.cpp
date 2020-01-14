@@ -3,10 +3,10 @@
 
 iWezel::iWezel()
 {
-	this->indeksowyBlok = -1;
-	this->rozmiarPliku = 0;
-	this->pierwszyBlok = -1;
-	this->drugiBlok = -1;
+	indeksowyBlok = -1;
+	rozmiarPliku = 0;
+	pierwszyBlok = -1;
+	drugiBlok = -1;
 	
 }
 
@@ -21,48 +21,48 @@ void iWezel::wypiszIwezel()
 
 void iWezel::czysc()
 {
-	this->rozmiarPliku = 0;
-	this->pierwszyBlok = -1;
-	this->drugiBlok = -1;
-	this->indeksowyBlok = -1;
+	rozmiarPliku = 0;
+	pierwszyBlok = -1;
+	drugiBlok = -1;
+	indeksowyBlok = -1;
 }
 
 void iWezel::ustawRozmiarPliku(short rozmiar)
 {
-	this->rozmiarPliku = rozmiar;
+	rozmiarPliku = rozmiar;
 }
 
 int iWezel::pobierzRozmiarPliku()
 {
-	return this->rozmiarPliku;
+	return rozmiarPliku;
 }
 
 void iWezel::ustawPierwszyBlok(short blok)
 {
-	this->pierwszyBlok = blok;
+	pierwszyBlok = blok;
 }
 
 short iWezel::pobierzPierwszyBlok()
 {
-	return this->pierwszyBlok;
+	return pierwszyBlok;
 }
 
 void iWezel::ustawDrugiBlok(short blok)
 {
-	this->drugiBlok = blok;
+	drugiBlok = blok;
 }
 
 short iWezel::pobierzDrugiBlok()
 {
-	return this->drugiBlok;
+	return drugiBlok;
 }
 
 void iWezel::ustawIndeksowyBlok(short blok)
 {
-	this->indeksowyBlok = blok;
+	indeksowyBlok = blok;
 }
 
 short iWezel::pobierzIndeksowyBlok()
 {
-	return this->indeksowyBlok;
+	return indeksowyBlok;
 }

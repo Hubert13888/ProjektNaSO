@@ -92,7 +92,8 @@ void lock_lock(Lock *lock, PCB *process) //zamek zawsze jest wskaznikiem, proces
         else // moze sie zdarzyc, kiedy proces ktory zamknal zamek chce go znowusz zamknac
         {
 			process->set_state(State::ZOMBIE); //proces przechodzi do stanu zatrzymania
-			unlock_lock(lock, process); //otwarcie zamka
+			lock->set_is_lock_open(true);
+			unlock_lock(lock, &process); //123
             std::cout << "Blad systemu - Zamek jest juz zamkniety przez ten proces.\n";
         }
     }
