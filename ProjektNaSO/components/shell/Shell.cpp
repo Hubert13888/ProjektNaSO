@@ -107,7 +107,175 @@ void Shell::run_function(std::vector<std::string> cmd)
 		//Execute(); - wykonanie kroku (Hubert?)
 		return;
 	}
-	
+	//ZARZADZANIE PLIKAMI
+	//Tworzenie pliku
+	else if (cmd[0] == "touch")
+	{
+		if (cmd.size() == 2) {
+			if (cmd[1] == "-h") {
+				std::cout << "\n" << cmd[0] << " " << "[nazwa_pliku]\n";
+			}
+			else
+			{
+				dysk::utworzPlik(cmd[1], cmd[2], cmd[3]);
+				std::cout << green << "[SHELL]" << white << " - Utworzono plik : " << cmd[1] << std::endl;
+			}
+		}
+		else
+		{
+			std::cout << red << "[SHELL]" << white << " - Niepoprawna liczba argumentow!" << std::endl;
+			std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
+		}
+	}
+	//Usuwanie pliku
+	else if (cmd[0] == "rm")
+	{
+		if (cmd.size() == 2) {
+			if (cmd[1] == "-h") {
+				std::cout << "\n" << cmd[0] << " " << "[nazwa_pliku]\n";
+			}
+			else if (/*Sprawdzenie czy taki plik istnieje*/ running)
+			{
+				std::cout << green << "[SHELL]" << white << " - Usunieto plik : " << cmd[1] << std::endl;
+			}
+			else
+			{
+				std::cout << red << "[SHELL]" << white << " - Podany plik nie istnieje!" << std::endl;
+			}
+		}
+		else
+		{
+			std::cout << red << "[SHELL]" << white << " - Niepoprawna liczba argumentow!" << std::endl;
+			std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
+		}
+	}
+	//Otwarcie pliku
+	else if (cmd[0] == "cat")
+	{
+		if (cmd.size() == 2)
+		{
+			if (cmd[1] == "-h")
+			{
+				std::cout << "\n" << cmd[0] << " " << "[nazwa_pliku]\n";
+			}
+			else if (/*sprawdzenie czy taki plik istnieje*/ running)
+			{
+
+				Lock *l = new Lock();
+				PCB *p = new PCB();
+
+				//Otwórz plik - Koziołek
+			}
+			else
+			{
+				std::cout << red << "[SHELL]" << white << " - Podany plik nie istnieje!" << std::endl;
+			}
+		}
+		else
+		{
+			std::cout << red << "[SHELL]" << white << " - Niepoprawna liczba argumentow!" << std::endl;
+			std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
+		}
+	}
+	//ZARZĄDZANIE KATALOGAMI
+	//Listowanie katalogu
+	else if (cmd[0] == "ls")
+	{
+		if (cmd.size() == 1)
+		{
+			//Listuj katalog
+		}
+		else if (cmd.size() == 2)
+		{
+			if (cmd[1] == "-h")
+			{
+				std::cout << "\n" << cmd[0] << " " << "[]\n";
+			}
+			else
+			{
+				std::cout << red << "[SHELL]" << white << " - Niepoprawny argument!" << std::endl;
+				std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
+			}
+		}
+		else
+		{
+			std::cout << red << "[SHELL]" << white << " - Niepoprawna liczba argumentow!" << std::endl;
+			std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
+		}
+	}
+	//Stworz folder
+	else if (cmd[0] == "mkdir")
+	{
+		if (cmd.size() == 2)
+		{
+			if (cmd[1] == "-h")
+			{
+				std::cout << "\n" << cmd[0] << " " << "[nazwa_folderu]\n";
+			}
+			else if (/*sprawdzenie czy istnieje katalog o tej nazwie*/ running)
+			{
+				//Stwórz katalog - Koziołek
+			}
+			else
+			{
+				std::cout << red << "[SHELL]" << white << " - Taki katalog juz istnieje!" << std::endl;
+			}
+		}
+		else
+		{
+			std::cout << red << "[SHELL]" << white << " - Niepoprawna liczba argumentow!" << std::endl;
+			std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
+		}
+	}
+	//Usun folder
+	else if (cmd[0] == "rmdir")
+	{
+		if (cmd.size() == 2)
+		{
+			if (cmd[1] == "-h")
+			{
+				std::cout << "\n" << cmd[0] << " " << "[nazwa_folderu]\n";
+			}
+			else if (/*sprawdzenie czy katalog istnieje*/ running)
+			{
+				//Usun katalog - Koziołek
+			}
+			else
+			{
+				std::cout << red << "[SHELL]" << white << " - Podany katalog nie istnieje!" << std::endl;
+			}
+		}
+		else
+		{
+			std::cout << red << "[SHELL]" << white << " - Niepoprawna liczba argumentow!" << std::endl;
+			std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
+		}
+	}
+	//Przejdz do folderu
+	else if (cmd[0] == "cd")
+	{
+		if (cmd.size() == 2)
+		{
+			if (cmd[1] == "-h")
+			{
+				std::cout << "\n" << cmd[0] << " " << "[nazwa_folderu]\n";
+			}
+			else if (/*sprawdzenie czy katalog istnieje*/ running)
+			{
+				//Przejdz do katalogu - Koziołek
+			}
+			else
+			{
+				std::cout << red << "[SHELL]" << white << " - Podany katalog nie istnieje!" << std::endl;
+			}
+		}
+		else
+		{
+			std::cout << red << "[SHELL]" << white << " - Niepoprawna liczba argumentow!" << std::endl;
+			std::cout << "          Wprowadz " << cmd[0] << " -h, aby uzyskac pomoc." << std::endl;
+		}
+	}
+	//DYSK OGÓLNIE - CZYJE?
 	//PAMIĘĆ RAM
 	else if (cmd[0] == "meminfo")
 	{
