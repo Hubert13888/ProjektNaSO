@@ -2,7 +2,15 @@
 #include "iostream"
 #include "../locks/lock.h"
 
-
+array<iWezel, 32> dysk::tablicaIwezlow;
+array<char, 1024> dysk::tablicaDysk;
+array<katalog, 1024> dysk::tablicaKatalogow;
+array<wpis, 32> dysk::tablicaWpisow;
+array<bool, 32> dysk::wektorBitowy;
+short dysk::wielkoscBloku;
+int dysk::wielkoscDysku;
+short dysk::wolneBloki;
+int dysk::ileFolderow;
 
 
 dysk::dysk()

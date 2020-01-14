@@ -1,6 +1,12 @@
 #include "katalog.h"
 #include <iostream>
 
+string katalog::nazwa;
+vector<short> katalog::numeryIwezlow;
+short katalog::wskaznikNaOjca;
+array<short, 32> katalog::wskaznikNaPodfolder;
+short katalog::podfoldery;
+
 katalog::katalog()
 {
 	this->nazwa.empty();
@@ -36,7 +42,7 @@ void katalog::wypiszKatalog()
 {
 	cout << " - nazwa: " << nazwa << endl;
 	cout << " - i-wezyly w katalogu: " << endl;
-	for (short element : this->numeryIwezlow)
+	for (short element : numeryIwezlow)
 	{
 		cout << element << " ";//wyspisuje wszytskie iwezly zawarte w danym katalogu
 	}
@@ -45,37 +51,37 @@ void katalog::wypiszKatalog()
 
 void katalog::ustawNazwe(string nazwa)
 {
-	this->nazwa = nazwa;
+	nazwa = nazwa;
 }
 
 string katalog::pobierzNazwe()
 {
-	return this->nazwa;
+	return nazwa;
 }
 
 void katalog::dodajNumerIwezela(short numer)
 {
-	this->numeryIwezlow.push_back(numer);
+	numeryIwezlow.push_back(numer);
 }
 
 void katalog::usunNumerIwezla(short numer)
 {
-	this->numeryIwezlow.erase(find(this->numeryIwezlow.begin(), this->numeryIwezlow.end(), numer) + 0);
+	numeryIwezlow.erase(find(numeryIwezlow.begin(), numeryIwezlow.end(), numer) + 0);
 }
 
 vector<short> katalog::pobierzNumery()
 {
-	return this->numeryIwezlow;
+	return numeryIwezlow;
 }
 
 void katalog::ustawOjca(short ojciec)
 {
-	this->wskaznikNaOjca = ojciec;
+	wskaznikNaOjca = ojciec;
 }
 
 short katalog::pobierzOjca()
 {
-	return this->wskaznikNaOjca;
+	return wskaznikNaOjca;
 }
 
 void katalog::ustawSyna(short syn)
@@ -90,7 +96,7 @@ void katalog::ustawSyna(short syn)
 
 array<short, 32> katalog::pobierzSynow()
 {
-	return this->wskaznikNaPodfolder;
+	return wskaznikNaPodfolder;
 }
 
 void katalog::usunSyna(short syn)

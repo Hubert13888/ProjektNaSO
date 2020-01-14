@@ -24,7 +24,10 @@
     <ClInclude Include="components\shell\Shell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="components\locks\lock.h">
+    <ClInclude Include="components\memmory\paging.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\memmory\tab_str_ram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="components\assembler\assembler.hpp">
@@ -42,12 +45,6 @@
     <ClInclude Include="components\files\wpisKatalogowy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="components\memmory\paging.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="components\memmory\tab_str_ram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="components\process_management\process_management.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -62,7 +59,10 @@
     <ClCompile Include="components\shell\Shell.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="components\locks\lock.cpp">
+    <ClCompile Include="components\memmory\paging.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="components\memmory\tab_str_ram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="components\assembler\assembler.cpp">
@@ -78,12 +78,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="components\files\wpisKatalogowy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="components\memmory\paging.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="components\memmory\tab_str_ram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="components\process_management\process_management.cpp">
