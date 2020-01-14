@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "lock.h"
+#include "../process_management/process_management.h"
 ;
 Lock::Lock()
 {
@@ -90,7 +91,9 @@ void lock_lock(Lock *lock, PCB *process) //zamek zawsze jest wskaznikiem, proces
             // proces zmienia stan na waiting.
         else // moze sie zdarzyc, kiedy proces ktory zamknal zamek chce go znowusz zamknac
         {
-            std::cout << "Zamek jest juz zajety przez ten proces.\n";
+			process->set_state(State::ZOMBIE); //proces przechodzi do stanu zatrzymania
+			unlock_lock(lock, process); //otwarcie zamka
+            std::cout << "Blad systemu - Zamek jest juz zamkniety przez ten proces.\n";
         }
     }
 }
@@ -104,7 +107,7 @@ void unlock_lock(Lock* lock, PCB* process)
         if (lock->get_processes_queue_size() > 0) //jezeli kolejka jest wieksza od 0 to
         {
             process = lock->remove_from_processes_queue(); // usuwa pierwszy proces z kolejki i zwraca ktory usunal
-            process->set_state(State::RUNNABLE); //ustala stan tego procesu na gotowosc READY (RUNNABLE - stan gotowosci)
+            process->set_state(State::READY); //ustala stan tego procesu na gotowosc READY (RUNNABLE - stan gotowosci)
             lock->set_who_closed_lock(process);
             std::cout << "Proces o PID " << process->PID << " ponownie zamknal zamek\n";
             if (lock->get_processes_queue_size() == 1)
@@ -116,53 +119,16 @@ void unlock_lock(Lock* lock, PCB* process)
             if (lock->get_who_closed_lock() == process) {
                 lock->set_is_lock_open(true); //otwieram zamek
                 std::cout << "Brak procesow w kolejce. Otwieranie zamka.\n";
-            } else std::cout << "Proces o PID " << process->PID << " nie moze otworzyc zamka, poniewaz inny proces go zamknal!\n";
+			}
+			else
+			{
+				process->set_state(State::ZOMBIE);
+				std::cout << "Blad Systemu - Proces o PID " << process->PID << " nie moze otworzyc zamka, poniewaz inny proces go zamknal!\n";
+			}
         }
 
     }
 }
 
-/*
-void unlock(Lock* lock, PCB* process)
-{
-    if(lock->get_is_open() == true)
-    {
-        std::cout << "Zamek jest juz otwarty.\n";
-    }
-    else
-    {
-        if(lock->get_who_closed_lock() == process)
-        {
-            lock->set_is_lock_open(true);
-            std::cout << "Otworzono zamek przez proces o PID "<< process->PID << "\n";
-            if(lock->get_processes_queue_size() != 0)
-            {
-                process = lock->remove_from_processes_queue(); // usuwa pierwszy proces z kolejki i zwraca ktory usunal
-                process->set_state(State::RUNNABLE); //ustala stan tego procesu na gotowosc READY (RUNNABLE - stan gotowosci)
-                lock->set_who_closed_lock(process);
-                std::cout << "W kolejce oczekuje jeszcze " << lock->get_processes_queue_size() << " procesow.\n";
-            } else{
-                lock->set_is_lock_open(true);
-                std::cout << "Kolejka pusta. Zamek otworzono.";
-            }
-        }else {
-            process = lock->remove_from_processes_queue(); // usuwa pierwszy proces z kolejki i zwraca ktory usunal
-            process->set_state(
-                    State::RUNNABLE); //ustala stan tego procesu na gotowosc READY (RUNNABLE - stan gotowosci)
-            lock->set_who_closed_lock(process);
-            std::cout << "Nastapila tutaj zmiana klucznika!\n";
-            std::cout << "W kolejce oczekuje jeszcze " << lock->get_processes_queue_size() << " procesow.\n";
-        }
-        if(lock->get_processes_queue_size() == 0)
-        {
-            if (lock->get_who_closed_lock() == process) {
-                lock->set_is_lock_open(true); //otwieram zamek
-                std::cout << "Brak procesow w kolejce. Otwieranie zamka.\n";
-            } else std::cout << "Proces o PID " << process->PID << " nie moze otworzyc zamka, poniewaz inny proces go zamknal!\n";
-        }
-    }
-}
-
-*/
 
 
