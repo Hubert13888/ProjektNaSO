@@ -39,4 +39,4 @@ void lock_lock(Lock *lock, PCB *process); // zamykanie zamka
 
 void unlock_lock(Lock *lock, PCB *process); //otwieranie zamka
 
-void unlock(Lock *lock, PCB *process);
+//void unlock(Lock *lock, PCB *process);
