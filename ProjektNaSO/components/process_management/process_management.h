@@ -9,19 +9,20 @@ enum State { UNDECLARED, RUNNING, SLEEPING, ZOMBIE, INIT };
 
 class PCB {
 public:
+	int A, B, C, D;
 	int PID;
 	string process_name;
 	string program_instructions;
 	State status;
 	int priority; // <100, 139>
 	int task_number;
-	int done_task_number;
+	int done_task_num;
 	float Q;
 
 	PCB() {
 		this->status = UNDECLARED;
 		this->task_number = 0;
-		this->done_task_number = 0;
+		this->done_task_num = 0;
 	}
 
 	PCB(int a) {
@@ -30,7 +31,7 @@ public:
 		this->process_name = "INIT";
 		this->status = INIT;
 		this->task_number = 0;
-		this->done_task_number = 0;
+		this->done_task_num = 0;
 	}
 
 	void print();

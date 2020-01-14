@@ -1,25 +1,29 @@
 #include "wpisKatalogowy.h"
 #include <iostream>
 
+string wpis::nazwa;
+string wpis::rozszerzenie;
+short wpis::numerIwezela;
+
 wpis::wpis()
 {
-	this->nazwa.empty();
-	this->rozszerzenie.empty();
-	this->numerIwezela = -1;
+	nazwa.empty();
+	rozszerzenie.empty();
+	numerIwezela = -1;
 }
 
 wpis::wpis(string nazwa, string rozszerzenie, short numer)
 {
-	this->nazwa = nazwa;
-	this->rozszerzenie = rozszerzenie;
-	this->numerIwezela = numer;
+	nazwa = nazwa;
+	rozszerzenie = rozszerzenie;
+	numerIwezela = numer;
 }
 
 void wpis::czysc()
 {
-	this->nazwa.empty();
-	this->rozszerzenie.empty();
-	this->numerIwezela = -1;
+	nazwa.empty();
+	rozszerzenie.empty();
+	numerIwezela = -1;
 }
 
 void wpis::wypisz()
@@ -32,7 +36,7 @@ void wpis::wypisz()
 
 void wpis::ustawNazwe(string nazwa)
 {
-	this->nazwa = nazwa;
+	nazwa = nazwa;
 }
 
 string wpis::pobierzNazwe()
@@ -42,7 +46,7 @@ string wpis::pobierzNazwe()
 
 void wpis::ustawRozszrzenie(string rozszerzenie)
 {
-	this->rozszerzenie = rozszerzenie;
+	rozszerzenie = rozszerzenie;
 }
 
 string wpis::pobierzRozszerzenie()
@@ -52,7 +56,7 @@ string wpis::pobierzRozszerzenie()
 
 void wpis::ustawNumerIwezla(short numer)
 {
-	this->numerIwezela = numer;
+	numerIwezela = numer;
 }
 
 short wpis::pobierzNumer()

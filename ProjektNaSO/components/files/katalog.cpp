@@ -1,6 +1,12 @@
 #include "katalog.h"
 #include <iostream>
 
+string katalog::nazwa;
+vector<short> katalog::numeryIwezlow;
+short katalog::wskaznikNaOjca;
+array<short, 32> katalog::wskaznikNaPodfolder;
+short katalog::podfoldery;
+
 katalog::katalog()
 {
 	nazwa.empty();

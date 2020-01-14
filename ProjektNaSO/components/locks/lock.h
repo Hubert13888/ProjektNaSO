@@ -4,7 +4,7 @@
 #pragma once
 #include <queue>
 #include <vector>
-#include "pcb.h" // z tego pliku (od Krzysia) klasa Lock i jej funkcje beda pobierać klase PCB
+#include "../process_management/process_management.h" // z tego pliku (od Krzysia) klasa Lock i jej funkcje beda pobierać klase PCB
 
 class Lock
 {

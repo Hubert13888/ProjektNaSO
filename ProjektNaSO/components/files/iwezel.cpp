@@ -1,6 +1,11 @@
 #include "iwezel.h"
 #include <cstdio>
 
+int iWezel::rozmiarPliku;
+short iWezel::pierwszyBlok;
+short iWezel::drugiBlok;
+short iWezel::indeksowyBlok;
+
 iWezel::iWezel()
 {
 	indeksowyBlok = -1;

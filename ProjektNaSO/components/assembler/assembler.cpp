@@ -1,5 +1,4 @@
 ﻿#include "assembler.hpp"
-#include "../process_management/process_management.h"
 
 PCB *currPCB;
 vector<string> executed_order;
@@ -66,7 +65,7 @@ void math_operation(int operation) {
 		l1 = read_register(executed_order[2]);
 
 	if (regex_match(executed_order[1], for_address)) {
-		//l2 = read_memory(currPCB, logical_address(executed_order[1]));
+		//l2 = paging.readM(currPCB, logical_address(executed_order[1]));
 
 		switch (operation) {
 		case 1:
@@ -124,8 +123,8 @@ void inc_dec(int operation) {
 //3 - większe
 //4 - mniejsze
 
-int conditional_jumps(int operation) {
-	int l1, l2, l3; //l3 = read_memory(currPCB, logical_address(executed_order[3]));
+void conditional_jumps(int operation) {
+	/*int l1, l2, l3; //l3 = read_memory(currPCB, logical_address(executed_order[3]));
 
 	if (regex_match(executed_order[1], for_address)) {
 		//l1 = read_memory(currPCB, logical_address(executed_order[1]));
@@ -159,7 +158,7 @@ int conditional_jumps(int operation) {
 	case 4:
 		if (l1 < l2) currPCB->done_task_num = l3;
 		break;
-	}
+	}*/
 }
 
 void execution() {
@@ -248,7 +247,7 @@ vector<string> read_bytes(int amount) {
 		string dana;
 
 		for (;;) {
-			int byte;
+			int byte = ' ';
 			//adres logiczny jest w: currPCB->done_task_num
 			//byte = read_memory(currPCB, currPCB->done_task_num);
 			currPCB->done_task_num++;

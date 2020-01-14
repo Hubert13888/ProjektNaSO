@@ -4,6 +4,10 @@
 #include <string>
 #include <regex>
 
+#include "../memmory/paging.h"
+#include "../process_management/process_management.h"
+#include "../files/dysk.h"
+
 using namespace std;
 
 int logical_address(string argument);
@@ -12,7 +16,7 @@ void math_operation(int operacja);
 
 void inc_dec(int operacja);
 
-int conditional_jumps(int operacja);
+void conditional_jumps(int operacja);
 
 void save_to_register(string regFrom, int value);
 
